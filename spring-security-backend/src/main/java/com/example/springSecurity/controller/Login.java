@@ -43,19 +43,19 @@ public class Login {
 	        boolean dBuserPass = service.getStatus(uc);
 	        if (dBuserPass) {
 	            log.info("login Successful ");
-	            return ResponseEntity.status(HttpStatus.OK).body("Login successful!");
+	            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"Login successful!\"}");
 		        } else {
 		            log.info(" Invalid password");
-		            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+		            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Login failed.\"}");
 		        }
 	        }
 	    	else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Login failed.\"}");
 	    	}
 	    }
 
 	    @PostMapping("/registration")
-	    private void registration(@RequestBody UserCredentials uc) {
+	    private ResponseEntity<String> registration(@RequestBody UserCredentials uc) {
 	        String email = uc.getUserEmail();
 	        String password = uc.getUserPassword();      
       //  String salt = generateRandomSalt();
@@ -65,6 +65,8 @@ public class Login {
 	        String hashedPassword = hashPassword(salt,saltedPassword);
 	        uc.setPasswordHash(hashedPassword);
 	        saveUserToDatabase(uc);
+            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"Registration successful!\"}");
+
 	    }
 
 private void saveUserToDatabase(UserCredentials uc) {

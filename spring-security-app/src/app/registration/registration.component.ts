@@ -25,11 +25,6 @@ export class RegistrationComponent {
       userPhnNo:''
     });
   }
-
-
-   
-
-
   register() {
  //let  password =this.form.getRawValue().userPassword //this.form.getRawValue().password; // Replace with the user's actual password
 //const saltRounds = 10; // You can adjust the number of rounds as needed
@@ -37,9 +32,10 @@ this.rqService.userRegistration(this.form.getRawValue()).subscribe(
   (value: any) => {
     
     console.log("Response from service:", value);
+    this.routing.navigate(['/login'])
   },
   (error: any) => {
-    console.error('Failed to fetch user validation:', error);
+    console.log('Failed to fetch user validation:', error);
   }
 );
     // bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -72,9 +68,6 @@ this.rqService.userRegistration(this.form.getRawValue()).subscribe(
     //     console.error('Failed to fetch user validation:', error);
     //   }
     // );
+
   }
-
-
-
-
 }

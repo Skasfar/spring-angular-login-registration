@@ -16,14 +16,14 @@ export class ServicesrqService {
   private baseUserApi = 'http://localhost:8080/login/';
   constructor(private http: HttpClient) { }
 
-  userValiation(obj:any): Observable<number> {
-    console.log("hi this is servie..",obj);
-    return this.http.post<number>(this.baseUserApi+"validate-user",obj, httpOptions);
+  userValiation(obj:any): Observable<any> {
+    // console.log("hi this is servie..",obj);
+    return this.http.post<any>(this.baseUserApi+"validate-user",obj, httpOptions);
   }
 
   
-  userRegistration(obj:any): Observable<number> {
-    console.log("hi this is Registration..",obj);
-    return this.http.post<number>(this.baseUserApi+"registration",obj, httpOptions);
+  userRegistration(obj:any): Observable<any> {
+    // console.log("hi this is Registration..",obj);
+    return this.http.post<any>(this.baseUserApi+"registration",obj, httpOptions);
   }
 }

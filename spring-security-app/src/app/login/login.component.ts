@@ -54,14 +54,15 @@ export class LoginComponent {
 this.rqService.userValiation(this.form.getRawValue()).subscribe(
   (value: any) => {
     console.log("Response from service:", value);
+    this.routing.navigate(['/home'])
+
+  },
+  (error: any) => {
+    console.error('Failed to login:', error);
+    // Log the status code and error message
+    // console.error('Status:', error.status);
+    // console.error('Error message:', error.message);
   }
-  // },
-  // (error: any) => {
-  //   console.error('Failed to fetch user validation:', error);
-  //   // Log the status code and error message
-  //   console.error('Status:', error.status);
-  //   console.error('Error message:', error.message);
-  // }
 );
 
   }
