@@ -2,6 +2,7 @@ package com.example.springSecurity.controller;
 
 import java.util.logging.Logger;
 
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +21,31 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+
+
+
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Date;
+
+// ...
+
+
+          
+
+      
+
+
+
 @Controller
 @CrossOrigin(origins = "*")
 @RequestMapping("/login")
 public class Login {
 	Logger log= Logger.getLogger(Login.class.getName());
-	
+	private final String secrectkey="njhfjigfwgfwivco";
 	    @Autowired
 	    UserService service;
 
@@ -43,7 +63,8 @@ public class Login {
 	        boolean dBuserPass = service.getStatus(uc);
 	        if (dBuserPass) {
 	            log.info("login Successful ");
-	            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"Login successful!\"}");
+	            String jwtToken = generateJwtToken(secrectkey+email);
+	            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"Login successful!\",\"jwt\": \""+jwtToken+"\"}");
 		        } else {
 		            log.info(" Invalid password");
 		            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Login failed.\"}");
@@ -84,5 +105,26 @@ private void saveUserToDatabase(UserCredentials uc) {
 	     String hashedPassword = BCrypt.hashpw(password, salt);
 	     return hashedPassword;
 	    }
+	    
+	    
+	    
+	    
+
+	 // Method to generate a JWT token
+	 private String generateJwtToken(String email) {
+	     Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+	     long expirationTimeInMilliseconds = 3600000; // 1 hour
+	     Date expirationDate = new Date(System.currentTimeMillis() + expirationTimeInMilliseconds);
+
+	     String jwtToken = Jwts.builder()
+	             .setSubject(email)
+	             .setIssuedAt(new Date())
+	             .setExpiration(expirationDate)
+	             .signWith(key)
+	             .compact();
+
+	     return jwtToken;
+	 }
 
 	}

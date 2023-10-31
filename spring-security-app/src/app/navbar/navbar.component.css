@@ -1,0 +1,6 @@
+.link-muted { color: #aaa; } .link-muted:hover { color: #1266f1; }
+.pop{
+    z-index: 10;
+    color: chocolate;
+    background: #e04747;
+}

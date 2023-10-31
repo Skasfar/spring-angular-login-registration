@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal, { SweetAlertIcon } from 'sweetalert2';
 import { ServicesrqService } from '../servicesrq.service';
-import * as bcrypt from 'bcryptjs';
+// import * as bcrypt from 'bcryptjs';
+// import Swal from 'sweetalert2/dist/sweetalert2.js';
+
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -12,7 +15,7 @@ import * as bcrypt from 'bcryptjs';
 
 
 export class RegistrationComponent {
-  form: any;
+  form!: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private routing: Router, private rqService: ServicesrqService) {}
 
@@ -28,16 +31,28 @@ export class RegistrationComponent {
   register() {
  //let  password =this.form.getRawValue().userPassword //this.form.getRawValue().password; // Replace with the user's actual password
 //const saltRounds = 10; // You can adjust the number of rounds as needed
+
+if(confirm("Are you sure ?"+this.form.getRawValue().userName)){
 this.rqService.userRegistration(this.form.getRawValue()).subscribe(
   (value: any) => {
     
     console.log("Response from service:", value);
+    this.showSweetAlert("Registration Success","success");
     this.routing.navigate(['/login'])
   },
   (error: any) => {
     console.log('Failed to fetch user validation:', error);
+    this.form.reset(); 
+    this.showSweetAlert("User Already Exists!!","error");
+    // Swal.fire({
+    //   title:'login sucess',
+    //   icon:'success',
+    // })
   }
-);
+); 
+}
+
+
     // bcrypt.hash(password, saltRounds, (err, hash) => {
     //   if (err) {
     //     console.error('Error hashing password:', err);
@@ -70,4 +85,33 @@ this.rqService.userRegistration(this.form.getRawValue()).subscribe(
     // );
 
   }
+
+
+  showSweetAlert(message: string, type: string) {
+    let sweetAlertIcon: SweetAlertIcon;
+  
+    // Map your custom 'type' string to a valid SweetAlertIcon
+    switch (type) {
+      case 'success':
+        sweetAlertIcon = 'success';
+        break;
+      case 'error':
+        sweetAlertIcon = 'error';
+        break;
+ 
+      // Add more cases as needed
+      default:
+        sweetAlertIcon =  'warning'; // Set a default value if the type is not recognized
+    }
+  
+    Swal.fire({
+      icon: sweetAlertIcon, // Use the mapped SweetAlertIcon
+      title: 'Sweet Message!',
+      text: message,
+      showConfirmButton: false,
+      timer: 3000
+    });
+  }
+  
+
 }

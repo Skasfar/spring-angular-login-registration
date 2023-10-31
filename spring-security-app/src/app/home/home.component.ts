@@ -24,4 +24,16 @@ export class HomeComponent implements OnInit {
     // Start the progress bar width increase
     this.increaseProgressBarWidth();
   }
+
+
+  // showSweetAlert() {
+  //   Swal.fire({
+  //     icon: 'success',
+  //     title: 'Sweet Message!',
+  //     text: 'This is a sweet message like Toastr!',
+  //     showConfirmButton: false,
+  //     timer: 3000
+  //   });
+  // }
+
 }
